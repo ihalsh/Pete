@@ -1,21 +1,19 @@
 package com.mygdx.game
 
-import com.badlogic.gdx.graphics.Color.BLACK
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
-import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.viewport.FitViewport
+import com.mygdx.game.Entities.Pete
 import com.mygdx.game.Utils.Assets.assetManager
 import com.mygdx.game.Utils.Constants.Companion.MAP_FILE_NAME
 import com.mygdx.game.Utils.Constants.Companion.WORLD_HEIGHT
 import com.mygdx.game.Utils.Constants.Companion.WORLD_WIDTH
 import ktx.app.KtxScreen
-import ktx.app.clearScreen
 
-class GameScreen(private val game: PeteGame) : KtxScreen {
+class GameScreen() : KtxScreen {
 
     private val shapeRenderer = ShapeRenderer()
     private val batch = SpriteBatch()
@@ -23,6 +21,8 @@ class GameScreen(private val game: PeteGame) : KtxScreen {
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
     private val tiledMap: TiledMap = assetManager.get(MAP_FILE_NAME)
     private val orthogonalTiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, batch)
+
+    private val pete: Pete = Pete()
 
     override fun show() {
         viewport.apply()
@@ -37,7 +37,11 @@ class GameScreen(private val game: PeteGame) : KtxScreen {
         drawDebug()
     }
 
-    private fun update(delta: Float) {}
+    private fun update(delta: Float) {
+
+        pete.update()
+
+    }
 
     private fun draw() {
         batch.projectionMatrix = camera.projection
@@ -49,6 +53,7 @@ class GameScreen(private val game: PeteGame) : KtxScreen {
         shapeRenderer.projectionMatrix = camera.projection
         shapeRenderer.transformMatrix = camera.view
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
+        pete.drawDebug(shapeRenderer)
         shapeRenderer.end()
     }
 

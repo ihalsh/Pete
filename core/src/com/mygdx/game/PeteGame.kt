@@ -12,7 +12,7 @@ class PeteGame : KtxGame<Screen>() {
         Assets.loadAssets()
 
         addScreen(LoadingScreen(this))
-        addScreen(GameScreen(this))
+        addScreen(GameScreen())
 
         setScreen<LoadingScreen>()
     }
