@@ -1,24 +1,37 @@
 package com.mygdx.game
 
 import com.badlogic.gdx.graphics.Color.BLACK
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.viewport.FitViewport
+import com.mygdx.game.Utils.Assets.assetManager
+import com.mygdx.game.Utils.Constants.Companion.MAP_FILE_NAME
 import com.mygdx.game.Utils.Constants.Companion.WORLD_HEIGHT
 import com.mygdx.game.Utils.Constants.Companion.WORLD_WIDTH
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
-import ktx.graphics.use
 
 class GameScreen(private val game: PeteGame) : KtxScreen {
 
     private val shapeRenderer = ShapeRenderer()
-    private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT)
     private val batch = SpriteBatch()
+    private val camera = OrthographicCamera()
+    private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
+    private val tiledMap: TiledMap = assetManager.get(MAP_FILE_NAME)
+    private val orthogonalTiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, batch)
+
+    override fun show() {
+        viewport.apply()
+        camera.update()
+        orthogonalTiledMapRenderer.setView(camera)
+    }
 
     override fun render(delta: Float) {
-        viewport.apply()
-        clearScreen(BLACK.r, BLACK.g, BLACK.b)
+//        clearScreen(BLACK.r, BLACK.g, BLACK.b)
         update(delta)
         draw()
         drawDebug()
@@ -27,12 +40,14 @@ class GameScreen(private val game: PeteGame) : KtxScreen {
     private fun update(delta: Float) {}
 
     private fun draw() {
-        batch.projectionMatrix = viewport.camera.combined
-        batch.use { }
+        batch.projectionMatrix = camera.projection
+        batch.transformMatrix = camera.view
+        orthogonalTiledMapRenderer.render()
     }
 
     private fun drawDebug() {
-        shapeRenderer.projectionMatrix = viewport.camera.combined
+        shapeRenderer.projectionMatrix = camera.projection
+        shapeRenderer.transformMatrix = camera.view
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
         shapeRenderer.end()
     }
@@ -43,5 +58,7 @@ class GameScreen(private val game: PeteGame) : KtxScreen {
 
     override fun dispose() {
         shapeRenderer.dispose()
+        orthogonalTiledMapRenderer.dispose()
+        batch.dispose()
     }
 }

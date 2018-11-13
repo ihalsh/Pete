@@ -8,5 +8,6 @@ class Constants {
         const val WORLD_HEIGHT = 480f
         const val PROGRESS_BAR_WIDTH = 100f
         const val PROGRESS_BAR_HEIGHT = 25f
+        const val MAP_FILE_NAME = "pete.tmx"
     }
 }

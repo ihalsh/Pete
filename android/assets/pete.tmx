@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="1">
+ <tileset firstgid="1" name="floor" tilewidth="16" tileheight="16" tilecount="18" columns="6">
+  <image source="floor.png" width="96" height="48"/>
+ </tileset>
+ <tileset firstgid="19" name="acorn" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="acorn.png" width="16" height="16"/>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="40" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztkrkNwDAMxJT/j5PsP2zOnQvBrVyQAAt1B1BmAAAAAAAA4NHJOXpEhUWe0SMqXPKLHuGQu/ZykKOcrK3OuesqN7nLw9rqnLveMslHvtZGZ69r9F3+l9c1+i7/y+safZf/9QMAcgVf
+  </data>
+ </layer>
+</map>

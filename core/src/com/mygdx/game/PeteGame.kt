@@ -9,6 +9,8 @@ class PeteGame : KtxGame<Screen>() {
 
     override fun create() {
 
+        Assets.loadAssets()
+
         addScreen(LoadingScreen(this))
         addScreen(GameScreen(this))
 
