@@ -9,6 +9,10 @@ import com.badlogic.gdx.math.Vector2
 import com.mygdx.game.Utils.Constants.Companion.HEIGHT
 import com.mygdx.game.Utils.Constants.Companion.MAX_X_SPEED
 import com.mygdx.game.Utils.Constants.Companion.WIDTH
+import com.mygdx.game.Utils.Constants.Companion.WORLD_WIDTH
+import com.sun.awt.SecurityWarning.setPosition
+
+
 
 class Pete {
 
@@ -25,7 +29,16 @@ class Pete {
         }
         position.x += velocity.x
         position.y += velocity.y
+        stopPeteLeavingTheScreen()
         updateCollisionRectangle()
+    }
+
+    private fun stopPeteLeavingTheScreen() {
+        when {
+            position.y < 0f -> position.y = 0f
+            position.x < 0f -> position.x = 0f
+            position.x + WIDTH > WORLD_WIDTH -> position.x = WORLD_WIDTH - WIDTH
+        }
     }
 
     fun drawDebug(shapeRenderer: ShapeRenderer) {

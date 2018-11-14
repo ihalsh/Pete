@@ -13,7 +13,7 @@ import com.mygdx.game.Utils.Constants.Companion.WORLD_HEIGHT
 import com.mygdx.game.Utils.Constants.Companion.WORLD_WIDTH
 import ktx.app.KtxScreen
 
-class GameScreen() : KtxScreen {
+class GameScreen : KtxScreen {
 
     private val shapeRenderer = ShapeRenderer()
     private val batch = SpriteBatch()
