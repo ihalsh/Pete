@@ -7,22 +7,21 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.mygdx.game.Entities.Pete
+import com.mygdx.game.Utils.Assets
 import com.mygdx.game.Utils.Assets.assetManager
 import com.mygdx.game.Utils.Constants.Companion.MAP_FILE_NAME
 import com.mygdx.game.Utils.Constants.Companion.WORLD_HEIGHT
 import com.mygdx.game.Utils.Constants.Companion.WORLD_WIDTH
 import ktx.app.KtxScreen
 
-class GameScreen : KtxScreen {
+class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
 
     private val shapeRenderer = ShapeRenderer()
     private val batch = SpriteBatch()
     private val camera = OrthographicCamera()
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
-    private val tiledMap: TiledMap = assetManager.get(MAP_FILE_NAME)
+    private val tiledMap = Assets.tiledMap
     private val orthogonalTiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, batch)
-
-    private val pete: Pete = Pete()
 
     override fun show() {
         viewport.apply()
@@ -39,7 +38,7 @@ class GameScreen : KtxScreen {
 
     private fun update(delta: Float) {
 
-        pete.update()
+        pete.update(delta)
 
     }
 
@@ -47,6 +46,7 @@ class GameScreen : KtxScreen {
         batch.projectionMatrix = camera.projection
         batch.transformMatrix = camera.view
         orthogonalTiledMapRenderer.render()
+        pete.draw(batch)
     }
 
     private fun drawDebug() {

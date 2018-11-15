@@ -11,6 +11,15 @@ import com.badlogic.gdx.utils.Logger
 import com.mygdx.game.Utils.Constants.Companion.MAP_FILE_NAME
 import ktx.log.info
 import ktx.log.logger
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Animation
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP
+import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.mygdx.game.Utils.Constants.Companion.ANIMATION_DURATION
+import com.mygdx.game.Utils.Constants.Companion.PETE_FILE_NAME
+import com.mygdx.game.Utils.Constants.Companion.PETE_HEIGHT
+import com.mygdx.game.Utils.Constants.Companion.PETE_WIDTH
+
 
 object Assets : Disposable, AssetErrorListener {
 
@@ -18,13 +27,34 @@ object Assets : Disposable, AssetErrorListener {
         setLoader(TiledMap::class.java, TmxMapLoader(InternalFileHandleResolver()))}
 
     private val logger = logger<Assets>()
+    lateinit var tiledMap: TiledMap
+    lateinit var peteTexture: Texture
+    lateinit var standing: TextureRegion
+    lateinit var standingLeft: TextureRegion
+    lateinit var jumpUp: TextureRegion
+    lateinit var jumpDown: TextureRegion
+    lateinit var walking: Animation<TextureRegion>
 
     fun loadAssets() {
         with(assetManager) {
             logger.level = Logger.INFO
             load(MAP_FILE_NAME, TiledMap::class.java)
+            load(PETE_FILE_NAME, Texture::class.java)
             finishLoading()
+            tiledMap = get(MAP_FILE_NAME)
+            peteTexture = get(PETE_FILE_NAME)
         }
+
+        val regions = TextureRegion.split(
+                peteTexture,
+                PETE_WIDTH.toInt(),
+                PETE_HEIGHT.toInt())[0]
+
+        walking = Animation(ANIMATION_DURATION, regions[0], regions[1])
+        walking.playMode = LOOP
+        standing = regions[0]
+        jumpUp = regions[2]
+        jumpDown = regions[3]
     }
 
     override fun dispose() {
