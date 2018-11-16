@@ -1,6 +1,7 @@
 package com.mygdx.game
 
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
@@ -8,11 +9,15 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.viewport.FitViewport
+import com.mygdx.game.Entities.Acorn
 import com.mygdx.game.Entities.Pete
 import com.mygdx.game.Utils.Assets
-import com.mygdx.game.Utils.Constants
+import com.mygdx.game.Utils.Assets.assetManager
+import com.mygdx.game.Utils.Constants.Companion.ACORN_FILE_NAME
+import com.mygdx.game.Utils.Constants.Companion.ACORN_LAYER
 import com.mygdx.game.Utils.Constants.Companion.CELL_SIZE
 import com.mygdx.game.Utils.Constants.Companion.PETE_WIDTH
 import com.mygdx.game.Utils.Constants.Companion.WORLD_HEIGHT
@@ -20,7 +25,6 @@ import com.mygdx.game.Utils.Constants.Companion.WORLD_WIDTH
 import com.mygdx.game.Utils.Constants.JumpState.GROUNDED
 import com.mygdx.game.Utils.Constants.JumpState.JUMPING
 import ktx.app.KtxScreen
-import ktx.log.info
 
 
 class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
@@ -31,11 +35,14 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
     private val tiledMap = Assets.tiledMap
     private val orthogonalTiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, batch)
+    private val acorns = Array<Acorn>()
+    private var score = 0
 
     override fun show() {
         viewport.apply()
         camera.update()
         orthogonalTiledMapRenderer.setView(camera)
+        populateAcorns()
     }
 
     override fun render(delta: Float) {
@@ -48,9 +55,17 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
     private fun update(delta: Float) {
 
         pete.update(delta)
-        handlePeteCollision()
         pete.stopPeteLeavingTheScreen()
+        handlePeteCollision()
+        handlePeteCollisionWithAcorn()
+    }
 
+    private fun handlePeteCollisionWithAcorn() {
+        val iterator = acorns.iterator()
+        while (iterator.hasNext()) {
+            val acorn = iterator.next()
+            if (pete.collisionRectangle.overlaps(acorn.collisionrectangle)) iterator.remove()
+        }
     }
 
     private fun handlePeteCollision() {
@@ -146,10 +161,19 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
         return cells
     }
 
+    private fun populateAcorns() {
+        val mapLayer = tiledMap.layers.get(ACORN_LAYER)
+        for (mapObject in mapLayer.objects)
+            acorns.add(Acorn(assetManager.get(ACORN_FILE_NAME, Texture::class.java),
+                    Vector2(mapObject.properties.get<Float>("x", Float::class.java),
+                            mapObject.properties.get<Float>("y", Float::class.java))))
+    }
+
     private fun draw() {
         batch.projectionMatrix = camera.projection
         batch.transformMatrix = camera.view
         orthogonalTiledMapRenderer.render()
+        for (acorn in acorns) acorn.draw(batch)
         pete.draw(batch)
     }
 
