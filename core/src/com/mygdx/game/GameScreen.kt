@@ -55,6 +55,7 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
         pete.stopPeteLeavingTheScreen()
         handlePeteCollision()
         handlePeteCollisionWithAcorn()
+        updateCameraX()
     }
 
     override fun render(delta: Float) {
@@ -193,6 +194,18 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
         pete.drawDebug(shapeRenderer)
         shapeRenderer.end()
+    }
+
+    private fun updateCameraX() {
+        val tiledMapTileLayer = Assets.tiledMap.layers.get(0) as TiledMapTileLayer
+        val levelWidth = tiledMapTileLayer.width * tiledMapTileLayer.tileWidth
+
+        if ((pete.position.x > WORLD_WIDTH / 2f) &&
+                (pete.position.x < (levelWidth - WORLD_WIDTH / 2f))) {
+            camera.position.set(pete.position.x, camera.position.y, camera.position.z)
+            camera.update()
+            orthogonalTiledMapRenderer.setView(camera)
+        }
     }
 
     override fun resize(width: Int, height: Int) {

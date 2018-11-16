@@ -15,6 +15,7 @@ import com.mygdx.game.Utils.Assets.standing
 import com.mygdx.game.Utils.Assets.tiledMap
 import com.mygdx.game.Utils.Assets.walking
 import com.mygdx.game.Utils.Constants.*
+import com.mygdx.game.Utils.Constants.Companion.CELL_SIZE
 import com.mygdx.game.Utils.Constants.Companion.GRAVITY
 import com.mygdx.game.Utils.Constants.Companion.JUMP_SPEED
 import com.mygdx.game.Utils.Constants.Companion.MAX_JUMP_DURATION
@@ -47,7 +48,7 @@ class Pete(val position: Vector2 = Vector2(SPAWN_POSITION),
         // If Pete isn't JUMPING, make him now FALLING
         if (jumpState != JUMPING && jumpState != GROUNDED) {
             jumpState = JumpState.FALLING
-            if (position.y < 0) {
+            if (position.y < CELL_SIZE * 3) {
                 jumpState = GROUNDED
                 velocity.y = 0f
             }
@@ -128,7 +129,7 @@ class Pete(val position: Vector2 = Vector2(SPAWN_POSITION),
         // Find out how long we've been jumping
         val jumpElapsedTime = MathUtils.nanoToSec * TimeUtils.timeSinceNanos(jumpStartTime)
 
-        if (jumpElapsedTime < MAX_JUMP_DURATION) {
+        if (jumpElapsedTime < 0.12f/*MAX_JUMP_DURATION*/) {
             velocity.y = JUMP_SPEED
 
         } else endJump()
