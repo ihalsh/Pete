@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.mygdx.game.Utils.Constants.Companion.ACORN_HEIGHT
 import com.mygdx.game.Utils.Constants.Companion.ACORN_WIDTH
-import ktx.graphics.use
 
 class Acorn(private val texture: Texture,
             private val position: Vector2 = Vector2(),
@@ -17,8 +16,6 @@ class Acorn(private val texture: Texture,
                     ACORN_HEIGHT)) {
 
     fun draw(batch: Batch) {
-        batch.use { it.draw(texture, position.x, position.y) }
+        batch.draw(texture, position.x, position.y)
     }
-
-
 }

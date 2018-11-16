@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="6">
- <tileset firstgid="1" name="floor" tilewidth="16" tileheight="16" tilecount="18" columns="6">
-  <image source="floor.png" width="96" height="48"/>
- </tileset>
- <tileset firstgid="19" name="acorn" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="acorn.png" width="16" height="16"/>
- </tileset>
- <layer id="1" name="Ground" width="40" height="30">
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="80" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="6">
+ <tileset firstgid="1" source="floor.tsx"/>
+ <tileset firstgid="19" source="acorn.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="80" height="30">
   <data encoding="base64" compression="zlib">
-   eJztkrkNwDAMxJT/j5PsP2zOnQvBrVyQAAt1B1BmAAAAAAAA4NHJOXpEhUWe0SMqXPKLHuGQu/ZykKOcrK3OuesqN7nLw9rqnLveMslHvtZGZ69r9F3+l9c1+i7/y+safZf/9QMAcgVf
+   eJztk9sKAyEMRLf3e7ft/39sxzeRrhqyah/OgQED0YniTBMAAAAAAAAAAAAAAABAno10/GO/0L+VdtJeOmT2W3rX4iTdG3t4/EL/WbpIV+mW2W/pXYuH9Gns4fEL/U9pll7SO7Pf0uul91/35tBbl+5mfY/ef92bQ29dupv1PXr+davfr15vXbpbzXxLuRil1nPE58frWr80y0u5GKXWc8Tnx+tavzTLS7kYpdZzxOfH61q/NMtfMNgOKQ==
   </data>
  </layer>
- <objectgroup id="5" name="Acorns">
-  <object id="1" gid="19" x="208" y="415" width="16" height="16"/>
-  <object id="2" gid="19" x="242" y="413" width="16" height="16"/>
-  <object id="3" gid="19" x="274" y="414" width="16" height="16"/>
-  <object id="4" gid="19" x="228" y="397" width="16" height="16"/>
-  <object id="5" gid="19" x="256" y="396" width="16" height="16"/>
+ <objectgroup id="2" name="Acorns">
+  <object id="1" gid="19" x="269" y="431" width="16" height="16"/>
+  <object id="3" gid="19" x="302" y="414" width="16" height="16"/>
+  <object id="4" gid="19" x="339" y="431" width="16" height="16"/>
+  <object id="5" gid="19" x="371" y="414" width="16" height="16"/>
  </objectgroup>
 </map>

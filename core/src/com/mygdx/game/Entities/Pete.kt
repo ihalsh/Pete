@@ -5,12 +5,14 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.TimeUtils
 import com.mygdx.game.Utils.Assets.jumpUp
 import com.mygdx.game.Utils.Assets.standing
+import com.mygdx.game.Utils.Assets.tiledMap
 import com.mygdx.game.Utils.Assets.walking
 import com.mygdx.game.Utils.Constants.*
 import com.mygdx.game.Utils.Constants.Companion.GRAVITY
@@ -141,12 +143,17 @@ class Pete(val position: Vector2 = Vector2(SPAWN_POSITION),
     }
 
     fun stopPeteLeavingTheScreen() {
+
+        val tiledMapTileLayer = tiledMap.layers.get(0) as TiledMapTileLayer
+        val levelWidth = tiledMapTileLayer.width * tiledMapTileLayer.tileWidth
+
         when {
             position.y < 0f -> {
                 position.y = 0f
             }
             position.x < 0f -> position.x = 0f
-            position.x + PETE_WIDTH > WORLD_WIDTH -> position.x = WORLD_WIDTH - PETE_WIDTH
+
+            position.x + PETE_WIDTH > levelWidth -> position.x = levelWidth - PETE_WIDTH
         }
     }
 
@@ -169,20 +176,7 @@ class Pete(val position: Vector2 = Vector2(SPAWN_POSITION),
         if (facing == Facing.RIGHT && region.isFlipX) region.flip(true, false)
         if (facing == Facing.LEFT && !region.isFlipX) region.flip(true, false)
 
-        batch.use {
-            it.draw(
-                    region,
-                    position.x,
-                    position.y
-//                    0f,
-//                    0f,
-//                    PETE_WIDTH,
-//                    PETE_HEIGHT,
-//                    3f,
-//                    3f,
-//                    0f
-            )
-        }
+        batch.draw(region, position.x, position.y)
     }
 
     fun updateCollisionRectangle() =

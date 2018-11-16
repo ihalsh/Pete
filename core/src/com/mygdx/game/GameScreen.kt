@@ -1,5 +1,6 @@
 package com.mygdx.game
 
+import com.badlogic.gdx.graphics.Color.DARK_GRAY
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -25,6 +26,9 @@ import com.mygdx.game.Utils.Constants.Companion.WORLD_WIDTH
 import com.mygdx.game.Utils.Constants.JumpState.GROUNDED
 import com.mygdx.game.Utils.Constants.JumpState.JUMPING
 import ktx.app.KtxScreen
+import ktx.app.clearScreen
+import ktx.graphics.use
+import ktx.log.info
 
 
 class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
@@ -45,13 +49,6 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
         populateAcorns()
     }
 
-    override fun render(delta: Float) {
-//        clearScreen(BLACK.r, BLACK.g, BLACK.b)
-        update(delta)
-        draw()
-        drawDebug()
-    }
-
     private fun update(delta: Float) {
 
         pete.update(delta)
@@ -60,11 +57,22 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
         handlePeteCollisionWithAcorn()
     }
 
+    override fun render(delta: Float) {
+        clearScreen(DARK_GRAY.r, DARK_GRAY.g, DARK_GRAY.b)
+        update(delta)
+        draw()
+        drawDebug()
+    }
+
     private fun handlePeteCollisionWithAcorn() {
         val iterator = acorns.iterator()
         while (iterator.hasNext()) {
             val acorn = iterator.next()
-            if (pete.collisionRectangle.overlaps(acorn.collisionrectangle)) iterator.remove()
+            if (pete.collisionRectangle.overlaps(acorn.collisionrectangle)) {
+                iterator.remove()
+                score++
+                info { "Score: $score" }
+            }
         }
     }
 
@@ -173,8 +181,10 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
         batch.projectionMatrix = camera.projection
         batch.transformMatrix = camera.view
         orthogonalTiledMapRenderer.render()
-        for (acorn in acorns) acorn.draw(batch)
-        pete.draw(batch)
+        batch.use {
+            for (acorn in acorns) acorn.draw(it)
+            pete.draw(it)
+        }
     }
 
     private fun drawDebug() {
