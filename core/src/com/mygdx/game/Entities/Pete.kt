@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.TimeUtils
-import com.mygdx.game.Utils.Assets.jumpDown
 import com.mygdx.game.Utils.Assets.jumpUp
 import com.mygdx.game.Utils.Assets.standing
 import com.mygdx.game.Utils.Assets.walking
@@ -20,19 +19,18 @@ import com.mygdx.game.Utils.Constants.Companion.MAX_JUMP_DURATION
 import com.mygdx.game.Utils.Constants.Companion.MOVEMENT_SPEED
 import com.mygdx.game.Utils.Constants.Companion.PETE_HEIGHT
 import com.mygdx.game.Utils.Constants.Companion.PETE_WIDTH
+import com.mygdx.game.Utils.Constants.Companion.SPAWN_POSITION
 import com.mygdx.game.Utils.Constants.Companion.WORLD_WIDTH
 import com.mygdx.game.Utils.Constants.JumpState.*
 import com.mygdx.game.Utils.Constants.WalkState.WALKING
 import ktx.graphics.use
-import ktx.log.info
 
-
-class Pete(private val position: Vector2 = Vector2(),
-           private val velocity: Vector2 = Vector2(),
-           private var jumpState: JumpState = FALLING,
+class Pete(val position: Vector2 = Vector2(SPAWN_POSITION),
+           val velocity: Vector2 = Vector2(),
+           var jumpState: JumpState = FALLING,
            var facing: Facing = Facing.RIGHT,
-           private val collisionRectangle: Rectangle = Rectangle(0f, 0f, PETE_WIDTH, PETE_HEIGHT),
-           private var jumpStartTime: Long = 0,
+           val collisionRectangle: Rectangle = Rectangle(0f, 0f, PETE_WIDTH, PETE_HEIGHT),
+           private var jumpStartTime: Long = 5,
            private var walkStartTime: Long = 0,
            private var walkState: WalkState = WalkState.STANDING) {
 
@@ -40,19 +38,17 @@ class Pete(private val position: Vector2 = Vector2(),
 
         // Accelerate Pete down
         velocity.y -= delta * GRAVITY
-        info { "${velocity.y}" }
 
         // Apply Pete velocity to his position
         position.mulAdd(velocity, delta)
 
         // If Pete isn't JUMPING, make him now FALLING
-        if (jumpState != JUMPING) {
+        if (jumpState != JUMPING && jumpState != GROUNDED) {
             jumpState = JumpState.FALLING
             if (position.y < 0) {
                 jumpState = GROUNDED
                 velocity.y = 0f
             }
-            info { "$jumpState" }
         }
 
         // Move left/right
@@ -66,7 +62,8 @@ class Pete(private val position: Vector2 = Vector2(),
         }
 
         // Jump
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) /*&&
+                MathUtils.nanoToSec * TimeUtils.timeSinceNanos(jumpStartTime) > JUMP_DELAY*/) {
             // Handle jump key
             when (jumpState) {
                 GROUNDED -> startJump()
@@ -75,6 +72,7 @@ class Pete(private val position: Vector2 = Vector2(),
             }
         }
         stopPeteLeavingTheScreen()
+        updateCollisionRectangle()
     }
 
     private fun moveLeft(delta: Float) {
@@ -90,7 +88,7 @@ class Pete(private val position: Vector2 = Vector2(),
         // Move Pete left by delta * movement speed
         position.mulAdd(MOVEMENT_SPEED, -delta)
 
-        stopPeteLeavingTheScreen()
+
     }
 
     private fun moveRight(delta: Float) {
@@ -112,7 +110,6 @@ class Pete(private val position: Vector2 = Vector2(),
     private fun startJump() {
         // Set jumpState to JUMPING
         jumpState = JUMPING
-        info { "$jumpState" }
 
         // Set the jump start time
         jumpStartTime = TimeUtils.nanoTime()
@@ -127,9 +124,9 @@ class Pete(private val position: Vector2 = Vector2(),
         if (jumpState != JUMPING) return
 
         // Find out how long we've been jumping
-        val elapsedTime = MathUtils.nanoToSec * (TimeUtils.nanoTime() - jumpStartTime)
+        val jumpElapsedTime = MathUtils.nanoToSec * TimeUtils.timeSinceNanos(jumpStartTime)
 
-        if (elapsedTime < MAX_JUMP_DURATION) {
+        if (jumpElapsedTime < MAX_JUMP_DURATION) {
             velocity.y = JUMP_SPEED
 
         } else endJump()
@@ -138,10 +135,12 @@ class Pete(private val position: Vector2 = Vector2(),
 
     private fun endJump() {
         // If we're JUMPING, now we're FALLING
-        if (jumpState == JUMPING) jumpState = FALLING
+        if (jumpState == JUMPING) {
+            jumpState = FALLING
+        }
     }
 
-    private fun stopPeteLeavingTheScreen() {
+    fun stopPeteLeavingTheScreen() {
         when {
             position.y < 0f -> {
                 position.y = 0f
@@ -164,7 +163,7 @@ class Pete(private val position: Vector2 = Vector2(),
             }
         } else {
             //if (jumpState == JUMPING) {
-                jumpUp
+            jumpUp
             //} else jumpDown
         }
         if (facing == Facing.RIGHT && region.isFlipX) region.flip(true, false)
@@ -186,10 +185,13 @@ class Pete(private val position: Vector2 = Vector2(),
         }
     }
 
+    fun updateCollisionRectangle() =
+            collisionRectangle.set(position.x, position.y, PETE_WIDTH, PETE_HEIGHT)
+
     fun drawDebug(shapeRenderer: ShapeRenderer) {
         shapeRenderer.rect(
-                position.x,
-                position.y,
+                collisionRectangle.x,
+                collisionRectangle.y,
                 collisionRectangle.width,
                 collisionRectangle.height
         )

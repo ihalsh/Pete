@@ -20,7 +20,6 @@ import com.mygdx.game.Utils.Constants.Companion.PETE_FILE_NAME
 import com.mygdx.game.Utils.Constants.Companion.PETE_HEIGHT
 import com.mygdx.game.Utils.Constants.Companion.PETE_WIDTH
 
-
 object Assets : Disposable, AssetErrorListener {
 
     val assetManager: AssetManager = AssetManager().apply {setErrorListener(Assets)
@@ -28,9 +27,8 @@ object Assets : Disposable, AssetErrorListener {
 
     private val logger = logger<Assets>()
     lateinit var tiledMap: TiledMap
-    lateinit var peteTexture: Texture
+    private lateinit var peteTexture: Texture
     lateinit var standing: TextureRegion
-    lateinit var standingLeft: TextureRegion
     lateinit var jumpUp: TextureRegion
     lateinit var jumpDown: TextureRegion
     lateinit var walking: Animation<TextureRegion>
@@ -50,8 +48,7 @@ object Assets : Disposable, AssetErrorListener {
                 PETE_WIDTH.toInt(),
                 PETE_HEIGHT.toInt())[0]
 
-        walking = Animation(ANIMATION_DURATION, regions[0], regions[1])
-        walking.playMode = LOOP
+        walking = Animation(ANIMATION_DURATION, regions[0], regions[1]).apply { playMode = LOOP }
         standing = regions[0]
         jumpUp = regions[2]
         jumpDown = regions[3]
