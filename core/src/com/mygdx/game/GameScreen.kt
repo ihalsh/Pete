@@ -16,7 +16,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.mygdx.game.Entities.Acorn
 import com.mygdx.game.Entities.Pete
 import com.mygdx.game.Utils.Assets
+import com.mygdx.game.Utils.Assets.acornSound
 import com.mygdx.game.Utils.Assets.assetManager
+import com.mygdx.game.Utils.Assets.peteTheme
+import com.mygdx.game.Utils.Assets.tiledMap
 import com.mygdx.game.Utils.Constants.Companion.ACORN_FILE_NAME
 import com.mygdx.game.Utils.Constants.Companion.ACORN_LAYER
 import com.mygdx.game.Utils.Constants.Companion.CELL_SIZE
@@ -47,6 +50,13 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
         camera.update()
         orthogonalTiledMapRenderer.setView(camera)
         populateAcorns()
+
+        //Play music
+        with(peteTheme) {
+            play()
+            isLooping = true
+            volume = 0.5f
+        }
     }
 
     private fun update(delta: Float) {
@@ -70,6 +80,8 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
         while (iterator.hasNext()) {
             val acorn = iterator.next()
             if (pete.collisionRectangle.overlaps(acorn.collisionrectangle)) {
+                //Acorn sound
+                acornSound.play()
                 iterator.remove()
                 score++
                 info { "Score: $score" }

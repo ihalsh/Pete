@@ -4,6 +4,8 @@ import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetErrorListener
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
+import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.utils.Disposable
@@ -15,9 +17,12 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.mygdx.game.Utils.Constants.Companion.ACORN_SOUND
 import com.mygdx.game.Utils.Constants.Companion.ANIMATION_DURATION
+import com.mygdx.game.Utils.Constants.Companion.JUMP_SOUND
 import com.mygdx.game.Utils.Constants.Companion.PETE_FILE_NAME
 import com.mygdx.game.Utils.Constants.Companion.PETE_HEIGHT
+import com.mygdx.game.Utils.Constants.Companion.PETE_THEME
 import com.mygdx.game.Utils.Constants.Companion.PETE_WIDTH
 
 object Assets : Disposable, AssetErrorListener {
@@ -32,15 +37,24 @@ object Assets : Disposable, AssetErrorListener {
     lateinit var jumpUp: TextureRegion
     lateinit var jumpDown: TextureRegion
     lateinit var walking: Animation<TextureRegion>
+    lateinit var jumpSound: Sound
+    lateinit var acornSound: Sound
+    lateinit var peteTheme: Music
 
     fun loadAssets() {
         with(assetManager) {
             logger.level = Logger.INFO
             load(MAP_FILE_NAME, TiledMap::class.java)
             load(PETE_FILE_NAME, Texture::class.java)
+            load(JUMP_SOUND, Sound::class.java)
+            load(ACORN_SOUND, Sound::class.java)
+            load(PETE_THEME, Music::class.java)
             finishLoading()
             tiledMap = get(MAP_FILE_NAME)
             peteTexture = get(PETE_FILE_NAME)
+            jumpSound = get(JUMP_SOUND)
+            acornSound = get(ACORN_SOUND)
+            peteTheme = get(PETE_THEME)
         }
 
         val regions = TextureRegion.split(

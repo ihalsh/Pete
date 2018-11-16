@@ -2,6 +2,7 @@ package com.mygdx.game.Entities
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -10,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.TimeUtils
+import com.mygdx.game.Utils.Assets.jumpSound
 import com.mygdx.game.Utils.Assets.jumpUp
 import com.mygdx.game.Utils.Assets.standing
 import com.mygdx.game.Utils.Assets.tiledMap
@@ -113,6 +115,9 @@ class Pete(val position: Vector2 = Vector2(SPAWN_POSITION),
     private fun startJump() {
         // Set jumpState to JUMPING
         jumpState = JUMPING
+
+        //Jump sound
+        jumpSound.play()
 
         // Set the jump start time
         jumpStartTime = TimeUtils.nanoTime()

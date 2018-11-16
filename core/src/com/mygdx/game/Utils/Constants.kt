@@ -13,6 +13,10 @@ class Constants {
         const val MAP_FILE_NAME = "pete.tmx"
         const val PETE_FILE_NAME = "pete.png"
         const val CELL_SIZE = 16f
+        const val JUMP_SOUND = "jump.wav"
+        const val ACORN_SOUND = "acorn.wav"
+        const val PETE_THEME = "peteTheme.mp3"
+
 
         //Pete
         val SPAWN_POSITION = Vector2(0f, 96f)
