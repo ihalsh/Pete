@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="80" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="6">
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="80" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="26">
  <tileset firstgid="1" source="floor.tsx"/>
  <tileset firstgid="19" source="acorn.tsx"/>
  <layer id="1" name="Tile Layer 1" width="80" height="30">
@@ -12,5 +12,23 @@
   <object id="3" gid="19" x="302" y="414" width="16" height="16"/>
   <object id="4" gid="19" x="339" y="431" width="16" height="16"/>
   <object id="5" gid="19" x="371" y="414" width="16" height="16"/>
+  <object id="6" gid="19" x="398" y="435" width="16" height="16"/>
+  <object id="7" gid="19" x="434" y="419" width="16" height="16"/>
+  <object id="8" gid="19" x="465" y="435" width="16" height="16"/>
+  <object id="9" gid="19" x="740" y="316" width="16" height="16"/>
+  <object id="10" gid="19" x="768" y="317" width="16" height="16"/>
+  <object id="11" gid="19" x="609" y="411" width="16" height="16"/>
+  <object id="12" gid="19" x="644" y="410" width="16" height="16"/>
+  <object id="13" gid="19" x="831" y="367" width="16" height="16"/>
+  <object id="14" gid="19" x="863" y="365" width="16" height="16"/>
+  <object id="17" gid="19" x="911" y="319" width="16" height="16"/>
+  <object id="18" gid="19" x="959" y="317" width="16" height="16"/>
+  <object id="19" gid="19" x="1041" y="415" width="16" height="16"/>
+  <object id="20" gid="19" x="1076" y="414" width="16" height="16"/>
+  <object id="21" gid="19" x="1106" y="418" width="16" height="16"/>
+  <object id="22" gid="19" x="1057" y="399" width="16" height="16"/>
+  <object id="23" gid="19" x="1094" y="399" width="16" height="16"/>
+  <object id="24" gid="19" x="1156" y="369" width="16" height="16"/>
+  <object id="25" gid="19" x="1200" y="365" width="16" height="16"/>
  </objectgroup>
 </map>

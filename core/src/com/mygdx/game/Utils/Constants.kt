@@ -8,6 +8,8 @@ class Constants {
         //General
         const val WORLD_WIDTH = 640f
         const val WORLD_HEIGHT = 480f
+        const val HUD_SIZE = 480f
+        const val HUD_MARGIN = 25f
         const val PROGRESS_BAR_WIDTH = 100f
         const val PROGRESS_BAR_HEIGHT = 25f
         const val MAP_FILE_NAME = "pete.tmx"

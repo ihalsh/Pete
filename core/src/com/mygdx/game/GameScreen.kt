@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.mygdx.game.Entities.Acorn
 import com.mygdx.game.Entities.Pete
+import com.mygdx.game.Overlays.ScoreOverlay
 import com.mygdx.game.Utils.Assets
 import com.mygdx.game.Utils.Assets.acornSound
 import com.mygdx.game.Utils.Assets.assetManager
@@ -44,6 +45,7 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
     private val orthogonalTiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, batch)
     private val acorns = Array<Acorn>()
     private var score = 0
+    private val scoreOverlay = ScoreOverlay()
 
     override fun show() {
         viewport.apply()
@@ -197,7 +199,10 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
         batch.use {
             for (acorn in acorns) acorn.draw(it)
             pete.draw(it)
+            scoreOverlay.render(it, score)
         }
+
+
     }
 
     private fun drawDebug() {
@@ -222,6 +227,7 @@ class GameScreen(private val pete: Pete = Pete()) : KtxScreen {
 
     override fun resize(width: Int, height: Int) {
         viewport.update(width, height, true)
+        scoreOverlay.viewport.update(width, height, true)
     }
 
     override fun dispose() {
